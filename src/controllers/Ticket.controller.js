@@ -27,13 +27,13 @@ const getTicket = async (req, res) => {
 const postTicket = async (req, res) => {
     try {
         const { idOrden, telefonoCliente, pdfLink } = req.body;
-        const nuevoTicket = new getGabinete({ idOrden, telefonoCliente, pdfLink });
+        const nuevoTicket = new Ticket({ idOrden, telefonoCliente, pdfLink });
         await nuevoTicket.save();
 
         res.status(201).json({
             ok: true,
             message: "Ticket creado existosamente",
-            data: nuevoGabinete,
+            data: nuevoTicket,
         });
     } catch (error) {
         res.status(500).json({ ok: false, message: error.message });
@@ -81,7 +81,7 @@ const deleteTicket = async (req, res) => {
         res.status(200).json({
             ok: true,
             message: "Ticket eliminado exitosamente",
-            data: deletedTicket,
+            data: ticketEliminado,
         });
     } catch (error) {
         res.status(500).json({ ok: false, message: error.message });
