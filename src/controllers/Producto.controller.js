@@ -68,7 +68,7 @@ const deleteProducto = async (req, res) => {
 
     if (resultado.deletedCount === 0) {
       return res
-        .json(404)
+        .status(404)
         .json({ ok: false, message: "No se encontró el producto a eliminar" });
     }
 
