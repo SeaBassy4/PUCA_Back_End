@@ -23,7 +23,7 @@ app.use("/api/productos", productoRoutes);
 app.use("/api/usuarios", usuarioRoutes);
 app.use("/api/ordenes", ordenRoutes);
 app.use("/api/detalle-ordenes", detalleOrdenRoutes);
-app.use("/api/tamaños", tamañoRoutes);
+app.use("/api/tamanos", tamañoRoutes);
 
 // Conectar a MongoDB
 mongoose
