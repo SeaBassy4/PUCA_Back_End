@@ -10,3 +10,6 @@ const tamañoController = require("../controllers/Tamaño.controller");
 router.get("/", tamañoController.getTamaños);
 router.post("/", tamañoController.postTamaño);
 router.put("/:id", tamañoController.putTamaño);
+router.delete("/:id", tamañoController.deleteTamaño);
+
+module.exports = router;
