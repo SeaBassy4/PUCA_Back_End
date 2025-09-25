@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 // importamos rutas
 
@@ -16,6 +17,7 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware para JSON
 app.use(express.json());
+app.use(cors());
 
 // Rutas
 app.use("/api/categorias", categoriaRoutes);
