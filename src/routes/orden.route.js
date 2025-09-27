@@ -9,5 +9,6 @@ const ordenController = require("../controllers/Orden.controller");
 
 router.get("/", ordenController.getOrdenes);
 router.post("/", ordenController.postOrden);
+router.put("/:id", ordenController.putOrden);
 
 module.exports = router;

@@ -30,7 +30,34 @@ const postOrden = async (req, res) => {
   }
 };
 
+const putOrden = async (req, res) => {
+  try {
+    const idOrden = req.params.id;
+    const nuevaOrden = req.body;
+
+    const resultado = await Orden.findByIdAndUpdate(idOrden, nuevaOrden, {
+      new: true,
+    });
+
+    if (!resultado) {
+      return res.status(404).json({
+        ok: false,
+        message: "No se encontró la orden a actualizar",
+      });
+    }
+
+    res.status(200).json({
+      ok: true,
+      message: "Orden actualizada exitosamente",
+      data: resultado,
+    });
+  } catch (error) {
+    res.status(500).json({ ok: false, message: error.message });
+  }
+};
+
 module.exports = {
   getOrdenes,
   postOrden,
+  putOrden,
 };
