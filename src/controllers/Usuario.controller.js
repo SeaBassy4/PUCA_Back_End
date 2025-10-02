@@ -2,7 +2,7 @@ const Usuario = require("../models/Usuario.model");
 
 const getUsuarios = async (req, res) => {
   try {
-    const usuarios = await Usuario.find();
+    const usuarios = await Usuario.find({ activo: true });
     res.status(200).json(usuarios);
   } catch (error) {
     res.status(500).json({ ok: false, message: error.message });
