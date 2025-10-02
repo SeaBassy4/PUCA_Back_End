@@ -62,9 +62,13 @@ const putTamaño = async (req, res) => {
 const deleteTamaño = async (req, res) => {
   try {
     const idTamaño = req.params.id;
-    const resultado = await Tamaño.deleteOne({ _id: idTamaño });
+    const resultado = await Tamaño.findByIdAndUpdate(
+      idTamaño,
+      { activo: false },
+      { new: true }
+    );
 
-    if (resultado.deletedCount === 0) {
+    if (!resultado) {
       return res.status(404).json({
         ok: false,
         message: "No se encontró el tamaño a eliminar",

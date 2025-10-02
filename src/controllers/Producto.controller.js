@@ -64,9 +64,13 @@ const putProducto = async (req, res) => {
 const deleteProducto = async (req, res) => {
   try {
     const idProducto = req.params.id;
-    const resultado = await Producto.deleteOne({ _id: idProducto });
+    const resultado = await Producto.findByIdAndUpdate(
+      idProducto,
+      { activo: false },
+      { new: true }
+    );
 
-    if (resultado.deletedCount === 0) {
+    if (!resultado) {
       return res
         .status(404)
         .json({ ok: false, message: "No se encontró el producto a eliminar" });

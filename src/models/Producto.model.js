@@ -23,6 +23,10 @@ const ProductoSchema = new mongoose.Schema({
     type: String,
     required: [true, "el enlace de la imagen es obligatoria"],
   },
+  activo: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 module.exports = mongoose.model("Producto", ProductoSchema, "Producto");

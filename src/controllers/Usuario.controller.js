@@ -61,9 +61,13 @@ const putUsuario = async (req, res) => {
 const deleteUsuario = async (req, res) => {
   try {
     const idUsuario = req.params.id;
-    const resultado = await Usuario.deleteOne({ _id: idUsuario });
+    const resultado = await Usuario.findByIdAndUpdate(
+      idUsuario,
+      { activo: false },
+      { new: true }
+    );
 
-    if (resultado.deletedCount === 0) {
+    if (!resultado) {
       return res
         .status(404)
         .json({ ok: false, message: "No se encontró el usuario a eliminar" });

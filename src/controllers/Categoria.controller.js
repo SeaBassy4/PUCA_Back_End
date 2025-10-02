@@ -62,7 +62,11 @@ const deleteCategoria = async (req, res) => {
   try {
     const idCategoria = req.params.id;
 
-    const resultado = await Categoria.findByIdAndDelete(idCategoria);
+    const resultado = await Categoria.findByIdAndUpdate(
+      idCategoria,
+      { activo: false },
+      { new: true }
+    );
     if (!resultado) {
       return res.status(404).json({
         ok: false,

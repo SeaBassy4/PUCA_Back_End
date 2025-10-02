@@ -23,6 +23,10 @@ const UsuarioSchema = new mongoose.Schema({
     enum: ["Administrador", "Empleado"],
     required: [true, "El rol es obligatorio"],
   },
+  activo: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 module.exports = mongoose.model("Usuario", UsuarioSchema, "Usuario");
