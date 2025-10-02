@@ -17,7 +17,8 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware para JSON
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: "*" }));
+
 
 // Rutas
 app.use("/api/categorias", categoriaRoutes);
