@@ -12,10 +12,12 @@ const getCategorias = async (req, res) => {
 
 const postCategoria = async (req, res) => {
   try {
-    const { nombre } = req.body;
+    const { nombre, imagenLink, bannerLink } = req.body;
 
     const nuevaCategoria = new Categoria({
       nombre,
+      imagenLink,
+      bannerLink,
     });
 
     await nuevaCategoria.save();
