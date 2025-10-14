@@ -19,7 +19,6 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cors({ origin: "*" }));
 
-
 // Rutas
 app.use("/api/categorias", categoriaRoutes);
 app.use("/api/productos", productoRoutes);

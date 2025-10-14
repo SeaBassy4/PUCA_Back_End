@@ -22,9 +22,13 @@ const postOrden = async (req, res) => {
       total,
     });
 
-    await nuevaOrden.save();
+    const result = await nuevaOrden.save();
 
-    res.status(201).json({ ok: true, message: "Orden creada exitosamente" });
+    res.status(201).json({
+      ok: true,
+      message: "Orden creada exitosamente",
+      _id: result._id,
+    });
   } catch (error) {
     res.status(500).json({ ok: false, message: error.message });
   }
