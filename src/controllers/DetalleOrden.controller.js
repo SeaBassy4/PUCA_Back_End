@@ -17,6 +17,8 @@ const postDetalleOrden = async (req, res) => {
     const { idOrden, idProducto, idTamaño, cantidad, precioUnitario } =
       req.body;
 
+    console.log(req.body);
+
     const nuevoDetalleOrden = new DetalleOrden({
       idOrden,
       idProducto,
@@ -24,6 +26,8 @@ const postDetalleOrden = async (req, res) => {
       cantidad,
       precioUnitario,
     });
+
+    console.log(nuevoDetalleOrden);
 
     await nuevoDetalleOrden.save();
 

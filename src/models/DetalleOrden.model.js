@@ -14,7 +14,7 @@ const DetalleOrdenSchema = new mongoose.Schema({
   idTamaño: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Tamaño",
-    required: [true, "El tamaño es obligatorio"],
+    default: null,
   },
   cantidad: {
     type: Number,

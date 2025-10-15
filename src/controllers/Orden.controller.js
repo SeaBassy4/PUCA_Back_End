@@ -12,13 +12,11 @@ const getOrdenes = async (req, res) => {
 
 const postOrden = async (req, res) => {
   try {
-    const { idUsuario, nombreCliente, estado, total } = req.body;
+    const { idUsuario, nombreCliente, total } = req.body;
 
     const nuevaOrden = new Orden({
       idUsuario,
       nombreCliente,
-      fechaHora: new Date(),
-      estado,
       total,
     });
 
