@@ -11,6 +11,7 @@ const usuarioRoutes = require("./routes/usuario.route");
 const ordenRoutes = require("./routes/orden.route");
 const detalleOrdenRoutes = require("./routes/detalleOrden.route");
 const tamañoRoutes = require("./routes/tamaño.route");
+const { enviarTicketWhatsapp } = require("../messages");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -26,6 +27,9 @@ app.use("/api/usuarios", usuarioRoutes);
 app.use("/api/ordenes", ordenRoutes);
 app.use("/api/detalle-ordenes", detalleOrdenRoutes);
 app.use("/api/tamanos", tamañoRoutes);
+
+//ruta univa para enviar mensajes de whatsapp
+app.post("/api/whatsapp-message", enviarTicketWhatsapp);
 
 // Conectar a MongoDB
 mongoose
