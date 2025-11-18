@@ -1,17 +1,36 @@
+const wppconnect = require("@wppconnect-team/wppconnect");
 const { jsPDF } = require("jspdf");
-const fs = require("fs");
 
-const enviarTicketWhatsapp = (req, res) => {
+let client;
+
+wppconnect
+  .create({
+    session: "puca-session",
+    puppeteerOptions: {
+      headless: true,
+      args: ["--no-sandbox"],
+    },
+  })
+  .then((c) => {
+    client = c;
+    console.log("WhatsApp listo");
+  })
+  .catch((err) => console.error(err));
+
+// Método para enviar ticket
+const enviarTicketWhatsapp = async (req, res) => {
   try {
     const { orden, detalleOrdenes, celular } = req.body;
 
-    //generamos pdf
+    if (!client) {
+      return res.status(500).json({
+        ok: false,
+        message: "El cliente de WhatsApp aún no está listo",
+      });
+    }
 
-    const pdf = new jsPDF({
-      unit: "pt",
-      format: "a6", // Tamaño tipo ticket
-    });
-
+    // Generar PDF
+    const pdf = new jsPDF({ unit: "pt", format: "a6" });
     let y = 30;
 
     pdf.setFontSize(14);
@@ -19,7 +38,7 @@ const enviarTicketWhatsapp = (req, res) => {
     y += 25;
 
     pdf.setFontSize(10);
-    pdf.text("Transacción realizada en la siguiente fecha y hora:", 20, y);
+    pdf.text("Transacción realizada en:", 20, y);
     y += 20;
 
     const fecha = new Date(orden.fechaHora).toLocaleString("es-MX");
@@ -32,17 +51,16 @@ const enviarTicketWhatsapp = (req, res) => {
     pdf.text(`Orden: ${orden._id}`, 20, y);
     y += 20;
 
-    // ITEMS
     detalleOrdenes.forEach((item) => {
       const nombre = item.idProducto.nombre;
-      const tamano = item.idTamaño.nombre;
+      const tamano = item?.idTamaño?.nombre;
       const cantidad = item.cantidad;
       const precio = (
         item.precioUnitario * cantidad +
         (item?.idTamaño?.precioExtra || 0) * item.cantidad
       ).toFixed(2);
 
-      pdf.text(`${cantidad}x ${nombre} - ${tamano}`, 20, y);
+      pdf.text(`${cantidad}x ${nombre} - ${tamano || ""}`, 20, y);
       pdf.text(precio.toString(), 200, y);
       y += 20;
     });
@@ -50,29 +68,25 @@ const enviarTicketWhatsapp = (req, res) => {
     y += 10;
 
     pdf.setFontSize(12);
-    pdf.text("TOTAL: " + orden.total.toFixed(2), 20, y, { maxWidth: 200 });
+    pdf.text("TOTAL: " + orden.total.toFixed(2), 20, y);
     y += 20;
 
-    pdf.line(20, y, 250, y);
-    y += 25;
+    const pdfBuffer = Buffer.from(pdf.output("arraybuffer"));
 
-    pdf.setFontSize(10);
-    pdf.text("Paseo de la patria #342, Col. Honor a la Bandera", 20, y);
-    y += 20;
+    // Enviar WhatsApp
+    await client.sendFile(
+      "521" + celular + "@c.us",
+      `data:application/pdf;base64,${pdfBuffer.toString("base64")}`,
+      `ticket-${orden._id}.pdf`,
+      "Aquí tienes tu ticket, gracias por tu compra! ☺️"
+    );
 
-    pdf.text(`Enviado a celular: ${celular}`, 20, y);
-
-    // ==========================
-    // 2. GUARDAR PDF EN SERVIDOR
-    // ==========================
-
-    const filePath = path.join(__dirname, `ticket-${orden._id}.pdf`);
-    pdf.save(filePath);
-
-    //enviamos pdf al cliente via whatsapp
-
-    //si todo bien entonces return response ok
+    res.json({
+      ok: true,
+      message: "Ticket enviado correctamente",
+    });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ ok: false, message: error.message });
   }
 };
